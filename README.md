@@ -1,4 +1,4 @@
-# memeCreator
+# MemeCreator
 
 MemeCreator allows users to upload an image and add text to that image. This provides a way for users to create memes that can then be uploaded to social media, such as Pinterest or Facebook.
 
