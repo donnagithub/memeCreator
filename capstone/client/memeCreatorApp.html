@@ -8,7 +8,9 @@
 
   {{> upload}}
   
-  <!-- {{> wall}} -->
+  {{> addtext}}
+  
+  {{> wall}}
   	</div>
 </body>
 
@@ -34,5 +36,11 @@
 </template>
 
 <template name="upload">
-  <input id="file-input" class="form-control" type="file">
+  Background image: <input id="file-input" class="form-control" type="file">
+</template>
+
+<template name="addtext">
+	<form class="add-text">
+		Quote: <input type="text" name="quote" placeholder="type quote here" />
+	</form>
 </template>

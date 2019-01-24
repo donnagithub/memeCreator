@@ -1,4 +1,5 @@
-const fs = Npm.require('fs');
+const fs = Npm.require('fs'),
+      gm = Npm.require('gm');
 Meteor.methods({
 'upload': function(fileinfo, filedata) {  
 	//get user info based on current logged in user
@@ -15,5 +16,6 @@ Meteor.methods({
     //fs.writeFile(path+user_info._id+fileinfo, filedata, {encoding: 'binary'});
     console.log("server: file: " + path+fileinfo);
     fs.writeFile(path+fileinfo, filedata, {encoding: 'binary'});
+    return (path+fileinfo);
  },
 });
