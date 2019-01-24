@@ -1,0 +1,38 @@
+<head>
+  <title>MemeCreator</title>
+</head>
+
+<body>
+	<div style="margin-left: 20px;">
+  <h1>Welcome to MemeCreator!</h1>
+
+  {{> upload}}
+  
+  <!-- {{> wall}} -->
+  	</div>
+</body>
+
+<template name="wall">
+
+  <h1>{{title}}</h1>
+  <button class='clear' style="background-color: none;">Clear</button>
+  <button class='red' style="background-color: red; color: white;">Red</button>
+  <button class='blue' style="background-color: blue; color: white;">Blue</button>
+  <button class='green' style="background-color: green; color: white;">Green</button>
+  <button class='black' style="background-color: black; color: white;">Black</button>
+  <button class='white' style="background-color: white; background: linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);">White</button>
+  <button class='thicker'>Thicker</button>
+  <button class='thinner'>Thinner</button>
+  <hr>
+
+{{> canvas}}
+
+</template>
+
+<template name="canvas">
+  <div id='canvas' style="border: 5px solid black; width: 810px; height: 610px;"></div>
+</template>
+
+<template name="upload">
+  <input id="file-input" class="form-control" type="file">
+</template>
