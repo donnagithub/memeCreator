@@ -1,21 +1,31 @@
 const fs = Npm.require('fs'),
       gm = Npm.require('gm');
+
+var path = process.env['METEOR_SHELL_DIR'] + '/../../../images/';
+ 
+      
 Meteor.methods({
-'upload': function(fileinfo, filedata) {  
-	//get user info based on current logged in user
-//    var user_info = Meteor.users.findOne({"_id": this.userId}, {fields: {"_id": 1}}); 
-//	 if(!user_info){
-//       return "Nope, not happening";
-//    }
-	//path can be any directory you like, I decided to upload to public
-	/*if you want to create directories on the fly,
-         you'll need to add some extra code, its really easy.*/
-    var path = process.env['METEOR_SHELL_DIR'] + '/../../../public/';
-	 
-	//add user id to file name and move 
-    //fs.writeFile(path+user_info._id+fileinfo, filedata, {encoding: 'binary'});
-    console.log("server: file: " + path+fileinfo);
-    fs.writeFile(path+fileinfo, filedata, {encoding: 'binary'});
-    return (path+fileinfo);
- },
+	'upload': function(filename, filedata) {  
+
+    	console.log("server: upload: file: " + path+"backgrounds/"+filename);    	
+
+    	fs.writeFile(path+"backgrounds/"+filename, filedata, {encoding: 'binary'});
+
+	  	return (filename);
+ 	},
+ 
+    'add-text-to-image': function(filename, x, y, text) {
+    
+    	console.log("server: add-text-to-image: file: " + path+"memes/"+filename);    	
+    	
+    	console.log("server: add-text-to-image: " + path+"memes/"+filename + " " + text);
+    	 
+    	// draw text on image   	
+		gm(path+"memes/"+filename)
+		.drawText(x, y, text)
+		.write(path+"memes/"+filename, function(err){
+    		if (err) return console.dir(arguments);
+    		console.log(this.outname + ' created  :: ' + arguments[3]);
+  		})
+    },
 });
