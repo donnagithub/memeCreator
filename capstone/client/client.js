@@ -19,8 +19,11 @@ Template.body.events({
 	
 });
 
-//upload function
-
+/*
+ * upload function - call the server to save the image in public folder, 
+ * then display the image in a canvas element
+ *
+ */
 upload_function = function (event) {
 
 	var renderedImg = document.getElementById('canvas-img'); //img tag in html
@@ -31,7 +34,7 @@ upload_function = function (event) {
 
 	reader.onload = function(fileLoadEvent) {
 	
-		// call server's upload method (which saves the file in the images/background folder)
+		// call server's upload method (which saves the file in the public folder)
 		// and pass file name, and filereader info
 		var filename = Meteor.call('upload', file.name, reader.result, function(error, result) {
         	console.log("client: upload_function: result: " + result);
@@ -39,7 +42,6 @@ upload_function = function (event) {
   			
   			var preview = document.getElementById('preview');
   			preview.src = result;
-        	//console.log('before resize : preview.height : ' + preview.naturalHeight + ' preview.width : ' + preview.naturalWidth);
 
   			var tmpImg = new Image();
   			tmpImg.src = preview.src;
@@ -53,7 +55,8 @@ upload_function = function (event) {
         			pic_real_height = this.height; // work for in memory images.
 
 /*
- * RESIZING CODE to resize image to max 500x500 - not working yet
+ * RESIZING CODE to resize image to max 500x500
+ * not working yet - will resize the canvas, but the image doesn't get resized
  *         			
         		console.log('before resize : img.height : ' + img.height + ' img.width : ' + img.width);
 
@@ -107,16 +110,22 @@ upload_function = function (event) {
     
 }
 
-//addtext function
+/*
+ * addtext function - add the quote to the image
+ *
+ */
 add_text_function = function (event) {
+
 	const target = event.target;
-	console.log("client: target: " + target);
 	const quote = target.quote.value;
-	console.log("client: quote: " + quote);
-	console.log("client: filename: " + gFilename);
+	const font = target.font.value;
+	const color = target.color.value;
+
+	console.log("add_text_function : quote: " + quote + " font : " + font + " color : " + color);
+	console.log("add_text_function : filename: " + gFilename);
 	
 	//call server's upload method and pass file name, and file-reader info
-	Meteor.call('add-text-to-image', gFilename, 50, 50, quote, function(error, result) {
+	Meteor.call('add-text-to-image', gFilename, 50, 50, quote, font, color, function(error, result) {
         console.log("client: result: " + result);
-		});	
+	});	
 }

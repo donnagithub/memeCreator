@@ -14,18 +14,22 @@ Meteor.methods({
 	  	return (filename);
  	},
  
-    'add-text-to-image': function(filename, x, y, text) {
+    'add-text-to-image': function(filename, x, y, text, font, color) {
     
-    	console.log("server: add-text-to-image: file: " + path+"memes/"+filename);    	
+    	console.log("server: add-text-to-image: file: " + path+filename);    	
     	
-    	console.log("server: add-text-to-image: " + path+"memes/"+filename + " " + text);
-    	 
+		console.log("server: add-text-to-image: quote: " + text + " font : " + font + " color : " + color);
+
     	// draw text on image   	
-		gm(path+"memes/"+filename)
+		gm(path+filename)
+		.fontSize(36)
+		.font(font)
+		.fill(color)
 		.drawText(x, y, text)
-		.write(path+"memes/"+filename, function(err){
+		.write(path+filename, function(err){
     		if (err) return console.dir(arguments);
     		console.log(this.outname + ' created  :: ' + arguments[3]);
   		})
     },
+    
 });

@@ -11,10 +11,7 @@
 		
 		{{> addtext}}
 		
-		<div style="display:none;">
-			<img id="preview">
-		</div>
-		<canvas id="canvas-img"></canvas>
+		{{> canvas}}
 		
   		<!--{{> wall}}-->
   		
@@ -41,8 +38,13 @@
 
 </template>
 
+
 <template name="canvas">
-	<div id='canvas' style="border: 5px solid black; width: 810px; height: 610px;"></div>
+	<!-- creates the image without displaying it, since it will be placed on the canvas -->
+	<div style="display:none;">
+		<img id="preview">
+	</div>
+	<canvas id="canvas-img"></canvas>
 </template>
 
 <template name="upload">
@@ -53,6 +55,20 @@
 <template name="addtext">
 	<form class="add-text">
 		<b>(2) Type your quote: </b><input type="text" name="quote" placeholder="Type quote here" size=100 />
+		<b>Choose your font: </b>
+			<select name="font">
+				<option value="Arial">Arial</option>
+				<option value="Courier">Courier</option>
+				<option value="Helvetica">Helvetica</option>
+				<option value="Times-Roman">Times-Roman</option>
+			</select>
+		<b>Choose your color: </b>
+			<select name="color">
+				<option value="black">Black</option>
+				<option value="blue">Blue</option>
+				<option value="green">Green</option>
+				<option value="red">Red</option>
+			</select>
 		<input type="submit" value="Submit" />
 	</form>
 </template>
