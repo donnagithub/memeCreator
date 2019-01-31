@@ -1,7 +1,7 @@
 const fs = Npm.require('fs'),
       gm = Npm.require('gm');
 
-var path = process.env['METEOR_SHELL_DIR'] + '/../../../images/';
+var path = process.env['METEOR_SHELL_DIR'] + '/../../../public/';
  
       
 Meteor.methods({
@@ -12,6 +12,7 @@ Meteor.methods({
     	fs.writeFile(path+"backgrounds/"+filename, filedata, {encoding: 'binary'});
 
 	  	return (filename);
+	  	//return (filedata);
  	},
  
     'add-text-to-image': function(filename, x, y, text) {

@@ -23,7 +23,7 @@ Template.body.events({
 
 upload_function = function (event) {
 
-	var renderedImg = document.getElementById('c1'); //img tag in html
+	var renderedImg = document.getElementById('canvas-img'); //img tag in html
 	var file = event.target.files[0];
 	var reader = new FileReader();
 
@@ -31,39 +31,91 @@ upload_function = function (event) {
 
 	reader.onload = function(fileLoadEvent) {
 	
-		//call server's upload method and pass file name, and file-reader info
+		// call server's upload method (which saves the file in the images/background folder)
+		// and pass file name, and filereader info
 		var filename = Meteor.call('upload', file.name, reader.result, function(error, result) {
         	console.log("client: upload_function: result: " + result);
-        	gFilename = file.name;
+        	gFilename = result;
+  			
+  			var preview = document.getElementById('preview');
+  			preview.src = result;
+        	console.log('before resize : preview.height : ' + preview.naturalHeight + ' preview.width : ' + preview.naturalWidth);
+
+  			var tmpImg = new Image();
+  			tmpImg.src = preview.src;
+
+      		var img = tmpImg;
+			var pic_real_width, pic_real_height;
+			$("<img/>") // Make in memory copy of image to avoid css issues
+    			.attr("src", $(img).attr("src"))
+   				.load(function() {
+        			pic_real_width = this.width;   // Note: $(this).width() will not
+        			pic_real_height = this.height; // work for in memory images.
+
+/*
+ * RESIZING CODE to resize image to max 500x500 - not working yet
+ *         			
+        		console.log('before resize : img.height : ' + img.height + ' img.width : ' + img.width);
+
+         		var maxWidth = 500;
+        		var maxHeight = 500;
+        		
+ 				// set the correct accepted dimensions on the canvas
+    			if (pic_real_width == pic_real_width) {
+    				img.width = maxWidth;
+    				img.height = maxHeight;
+    			} 
+    			else if (pic_real_width > pic_real_height) {
+        			console.log('Image is landscape');
+        			if (pic_real_width > maxWidth) {
+        				// maintain aspect ratio
+            			img.height = pic_real_height * maxWidth / pic_real_width;	
+            			img.width = maxWidth;
+            			console.log('Image resized');
+        			}
+    			} 
+    			else {
+        			if (pic_real_height > maxHeight) {
+            			console.log('Image is portrait');
+            			img.width = pic_real_width * maxHeight / pic_real_height;
+           				img.height = maxHeight;
+            			console.log('Image resized');
+        			}
+    			}
+				
+				console.log('after resize : img.height : ' + img.height + ' img.width : ' + img.width);
+        		
+	       		console.log('resize : image.src: ' + img.src);
+*/
+	       		
+				var canvas = document.getElementById('canvas-img');
+				canvas.height = img.height;
+    			canvas.width = img.width;
+    			canvas.style="border:1px solid #000000;";
+
+ 				// draw image on canvas  			
+       			const ctx = canvas.getContext('2d');
+       			ctx.drawImage(img, 10, 10);
+        	});
+
 		});
-		
-		var img = new Image();
-        var tmpImg = new Image();
-        img.src = fileLoadEvent.target.result;
-        gFilename = file.name;
-		console.log("client: upload_function: filename: " + gFilename);
-        renderedImg.src = img.src;
-        console.log('Starting resize');
-        tmpImg.src = resize(img, 500, 500, function() {
-        	console.log('OK, image ready');
-        });
-        tmpImg.onload = function() {
-        	console.log('Tmp img loaded');
-            renderedImg.src = tmpImg.src;
-        } 
-    }
+	}
+	
     reader.readAsBinaryString(file);
+    
 }
 
 
 /*
 * Uses a canvas to shrink/scale an image
  */
-var resize = function (image, maxWidth, maxHeight, img, callback) {
+var resize = function (image, maxWidth, maxHeight, callback) {
     var cb = callback;
     // setup the canvas
-    var canvas = document.createElement('canvas');
-    console.log('Creating canvas');
+//    var canvas = document.createElement('canvas');
+    console.log('resize : image.src: ' + image.src);
+	var canvas = document.getElementById('canvas-img');
+    console.log('Creating canvas: height: ' + image.height + ' width: ' + image.width);
     canvas.height = image.height;
     canvas.width = image.width;
     console.log('Canvas created');
@@ -72,7 +124,8 @@ var resize = function (image, maxWidth, maxHeight, img, callback) {
     if (image.width > image.height) {
         console.log('Image is landscape');
         if (image.width > maxWidth) {
-            canvas.height = image.height * maxWidth / image.width;	        // maintain aspect ratio
+        	// maintain aspect ratio
+            canvas.height = image.height * maxWidth / image.width;	
             canvas.width = maxWidth;
             console.log('Canvas resized');
         }
@@ -86,15 +139,15 @@ var resize = function (image, maxWidth, maxHeight, img, callback) {
     }
             
     // draw the image
-    console.log('Drawing...');
-    canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
+    console.log('Drawing... : width : ' + canvas.width + ' height: ' + canvas.height);
+    canvas.getContext('2d').drawImage(image, canvas.width, canvas.height);
     console.log('Drawn successfully');
                     
     var result = canvas.toDataURL();
                     
     if (typeof cb === 'function') {
         console.log('Calling back...')
-            cb(result, img);
+            cb(result);
     }
                         
     return result;
