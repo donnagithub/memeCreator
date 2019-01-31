@@ -4,10 +4,10 @@ MemeCreator allows users to upload an image and add text to that image. This pro
 
 There are two inputs: 
 
-- the image file, which is copied into the images/backgrounds folder of the project
+- the image file, which is copied into the public folder of the project
 - the quote text, which is added to the image file at the point on the image that the user clicks on.
 
-The resulting combined image and text is saved into the images/memes folder. 
+The resulting combined image and text is saved into the public folder. 
 
 Future enhancements include:
 
