@@ -7,12 +7,11 @@ var path = process.env['METEOR_SHELL_DIR'] + '/../../../public/';
 Meteor.methods({
 	'upload': function(filename, filedata) {  
 
-    	console.log("server: upload: file: " + path+"backgrounds/"+filename);    	
+    	console.log("server: upload: file: " + path+filename);    	
 
-    	fs.writeFile(path+"backgrounds/"+filename, filedata, {encoding: 'binary'});
+    	fs.writeFile(path+filename, filedata, {encoding: 'binary'});
 
 	  	return (filename);
-	  	//return (filedata);
  	},
  
     'add-text-to-image': function(filename, x, y, text) {

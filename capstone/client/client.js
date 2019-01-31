@@ -39,7 +39,7 @@ upload_function = function (event) {
   			
   			var preview = document.getElementById('preview');
   			preview.src = result;
-        	console.log('before resize : preview.height : ' + preview.naturalHeight + ' preview.width : ' + preview.naturalWidth);
+        	//console.log('before resize : preview.height : ' + preview.naturalHeight + ' preview.width : ' + preview.naturalWidth);
 
   			var tmpImg = new Image();
   			tmpImg.src = preview.src;
@@ -86,6 +86,8 @@ upload_function = function (event) {
 				console.log('after resize : img.height : ' + img.height + ' img.width : ' + img.width);
         		
 	       		console.log('resize : image.src: ' + img.src);
+*
+* END RESIZING CODE
 */
 	       		
 				var canvas = document.getElementById('canvas-img');
@@ -104,55 +106,6 @@ upload_function = function (event) {
     reader.readAsBinaryString(file);
     
 }
-
-
-/*
-* Uses a canvas to shrink/scale an image
- */
-var resize = function (image, maxWidth, maxHeight, callback) {
-    var cb = callback;
-    // setup the canvas
-//    var canvas = document.createElement('canvas');
-    console.log('resize : image.src: ' + image.src);
-	var canvas = document.getElementById('canvas-img');
-    console.log('Creating canvas: height: ' + image.height + ' width: ' + image.width);
-    canvas.height = image.height;
-    canvas.width = image.width;
-    console.log('Canvas created');
-            
-    // set the correct accepted dimensions on the canvas
-    if (image.width > image.height) {
-        console.log('Image is landscape');
-        if (image.width > maxWidth) {
-        	// maintain aspect ratio
-            canvas.height = image.height * maxWidth / image.width;	
-            canvas.width = maxWidth;
-            console.log('Canvas resized');
-        }
-    } else {
-        if (image.height > maxHeight) {
-            console.log('Image is portrait');
-            canvas.width = image.width * maxHeight / image.height;
-            canvas.height = maxHeight;
-            console.log('Canvas resized');
-        }
-    }
-            
-    // draw the image
-    console.log('Drawing... : width : ' + canvas.width + ' height: ' + canvas.height);
-    canvas.getContext('2d').drawImage(image, canvas.width, canvas.height);
-    console.log('Drawn successfully');
-                    
-    var result = canvas.toDataURL();
-                    
-    if (typeof cb === 'function') {
-        console.log('Calling back...')
-            cb(result);
-    }
-                        
-    return result;
-            
-};
 
 //addtext function
 add_text_function = function (event) {
