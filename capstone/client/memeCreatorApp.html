@@ -7,20 +7,59 @@
 	
 		<h1>Welcome to MemeCreator!</h1>
 		
-		{{> upload}}
-		
 		{{> addtext}}
 		
-		{{> canvas}}
+		{{> upload}}
 		
-  		<!--{{> wall}}-->
+  		{{> canvas}}
   		
   	</div>
 </body>
 
-<template name="wall">
+<template name="addtext">
+	<form class="add-text">
+		<b>(1) Type your quote: </b><input type="text" name="quote" placeholder="Type quote here" size=100 />
+		<b>Choose your font: </b>
+			<select name="font">
+				<option value="Arial">Arial</option>
+				<option value="Courier">Courier</option>
+				<option value="Helvetica">Helvetica</option>
+				<option value="Times-Roman">Times-Roman</option>
+			</select>
+		<b>Choose your font size: </b>
+			<select name="fontsize">
+				<option value="14">14</option>
+				<option value="20">20</option>
+				<option value="36">36</option>
+				<option value="48">48</option>
+				<option value="72">72</option>
+			</select>
+		<b>Choose your color: </b>
+			<select name="color">
+				<option value="black">Black</option>
+				<option value="blue">Blue</option>
+				<option value="green">Green</option>
+				<option value="red">Red</option>
+			</select>
+		<input type="submit" value="Save" />
+	</form>
+</template>
+
+<template name="upload">
+	<b>(2) Upload your background image: </b> 
+	<input id="file-input" name="..." class="myFileInput" type="file" >
+</template>
+
+<template name="canvas">
+	<canvas id="canvas-img"></canvas>
+	<div id="save-image-instruction" style="display:none;">
+		<b>(3) Right click your new meme and select "Save image as..."</b>
+	</div>
+</template>
 
 <!--
+<template name="wall">
+
   <h1>{{title}}</h1>
   <button class='clear' style="background-color: none;">Clear</button>
   <button class='red' style="background-color: red; color: white;">Red</button>
@@ -31,44 +70,12 @@
   <button class='thicker'>Thicker</button>
   <button class='thinner'>Thinner</button>
   <hr>
--->
 	<b>(3) Click on the image to place the text on the background.</b>
-
 	{{> canvas}}
 
 </template>
+-->
 
 
-<template name="canvas">
-	<!-- creates the image without displaying it, since it will be placed on the canvas -->
-	<div style="display:none;">
-		<img id="preview">
-	</div>
-	<canvas id="canvas-img"></canvas>
-</template>
 
-<template name="upload">
-	<b>(1) Upload your background image: </b> 
-	<input id="file-input" class="form-control" type="file">
-</template>
 
-<template name="addtext">
-	<form class="add-text">
-		<b>(2) Type your quote: </b><input type="text" name="quote" placeholder="Type quote here" size=100 />
-		<b>Choose your font: </b>
-			<select name="font">
-				<option value="Arial">Arial</option>
-				<option value="Courier">Courier</option>
-				<option value="Helvetica">Helvetica</option>
-				<option value="Times-Roman">Times-Roman</option>
-			</select>
-		<b>Choose your color: </b>
-			<select name="color">
-				<option value="black">Black</option>
-				<option value="blue">Blue</option>
-				<option value="green">Green</option>
-				<option value="red">Red</option>
-			</select>
-		<input type="submit" value="Submit" />
-	</form>
-</template>

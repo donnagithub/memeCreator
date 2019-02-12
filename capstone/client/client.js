@@ -1,131 +1,68 @@
+
 let gFilename = "";
+let gFile = "";
+
+let gQuote = "default quote";
+let gFont = "arial";
+let gFontsize = "20";
+let gColor = "black";
+let gHeight = 500;
+let gWidth = 500;
 
 Template.upload.events({
+   'change .myFileInput': function(event, template) {
+   
+		var file = event.target.files[0];
 
-	//call upload function when the file-input element changes
-    'change #file-input': function(event){
-        upload_function(event);
-    },
+   		console.log("in change .myFileInput : file: " + file.name);
+		
+		var canvas = document.getElementById("canvas-img");
 
-});
+		var context = canvas.getContext("2d");
 
+		var imageObj = new Image();
+		imageObj.onload = function(){
+		
+			var hRatio = canvas.width / imageObj.width    ;
+			var vRatio = canvas.height / imageObj.height  ;
+			var ratio  = Math.min ( hRatio, vRatio );
+			context.drawImage(imageObj, 0, 0, imageObj.width, imageObj.height, 0, 0, imageObj.width*ratio, imageObj.height*ratio);
+			context.font = gFontsize + "px " + gFont;
+			context.fillStyle = gColor;
+			context.fillText(gQuote, 10, gFontsize);
+		};
+		
+		var reader = new FileReader();
+
+		console.log("client: upload_function: file: " + file.name);
+
+		reader.onload = function(fileLoadEvent) {
+		
+			// display the image with text
+			imageObj.src = reader.result; 
+			
+			document.getElementById("save-image-instruction").setAttribute("style", "inline");
+		}
+		
+		reader.readAsDataURL(file);
+     
+	}, // change .myFileInput
+
+}); // Template.upload.events
 
 Template.body.events({
 
     'submit .add-text': function(event) {
-    	event.preventDefault();
-		add_text_function(event);
+	   	event.preventDefault();
+		const target = event.target;
+		gQuote = target.quote.value;
+		gFont = target.font.value;
+		gFontsize = target.fontsize.value;
+		gColor = target.color.value;
+
+		console.log("save_text_settings_function : quote: " + gQuote + " font : " + gFont + " fontsize : " + gFontsize + " color : " + gColor);
+
 	},
 	
 });
 
-/*
- * upload function - call the server to save the image in public folder, 
- * then display the image in a canvas element
- *
- */
-upload_function = function (event) {
-
-	var renderedImg = document.getElementById('canvas-img'); //img tag in html
-	var file = event.target.files[0];
-	var reader = new FileReader();
-
-	console.log("client: file: " + file.name);
-
-	reader.onload = function(fileLoadEvent) {
-	
-		// call server's upload method (which saves the file in the public folder)
-		// and pass file name, and filereader info
-		var filename = Meteor.call('upload', file.name, reader.result, function(error, result) {
-        	console.log("client: upload_function: result: " + result);
-        	gFilename = result;
-  			
-  			var preview = document.getElementById('preview');
-  			preview.src = result;
-
-  			var tmpImg = new Image();
-  			tmpImg.src = preview.src;
-
-      		var img = tmpImg;
-			var pic_real_width, pic_real_height;
-			$("<img/>") // Make in memory copy of image to avoid css issues
-    			.attr("src", $(img).attr("src"))
-   				.load(function() {
-        			pic_real_width = this.width;   // Note: $(this).width() will not
-        			pic_real_height = this.height; // work for in memory images.
-
-/*
- * RESIZING CODE to resize image to max 500x500
- * not working yet - will resize the canvas, but the image doesn't get resized
- *         			
-        		console.log('before resize : img.height : ' + img.height + ' img.width : ' + img.width);
-
-         		var maxWidth = 500;
-        		var maxHeight = 500;
-        		
- 				// set the correct accepted dimensions on the canvas
-    			if (pic_real_width == pic_real_width) {
-    				img.width = maxWidth;
-    				img.height = maxHeight;
-    			} 
-    			else if (pic_real_width > pic_real_height) {
-        			console.log('Image is landscape');
-        			if (pic_real_width > maxWidth) {
-        				// maintain aspect ratio
-            			img.height = pic_real_height * maxWidth / pic_real_width;	
-            			img.width = maxWidth;
-            			console.log('Image resized');
-        			}
-    			} 
-    			else {
-        			if (pic_real_height > maxHeight) {
-            			console.log('Image is portrait');
-            			img.width = pic_real_width * maxHeight / pic_real_height;
-           				img.height = maxHeight;
-            			console.log('Image resized');
-        			}
-    			}
-				
-				console.log('after resize : img.height : ' + img.height + ' img.width : ' + img.width);
-        		
-	       		console.log('resize : image.src: ' + img.src);
-*
-* END RESIZING CODE
-*/
-	       		
-				var canvas = document.getElementById('canvas-img');
-				canvas.height = img.height;
-    			canvas.width = img.width;
-    			canvas.style="border:1px solid #000000;";
-
- 				// draw image on canvas  			
-       			const ctx = canvas.getContext('2d');
-       			ctx.drawImage(img, 10, 10);
-        	});
-
-		});
-	}
-	
-    reader.readAsBinaryString(file);
-    
-}
-
-/*
- * addtext function - add the quote to the image
- *
- */
-add_text_function = function (event) {
-
-	const target = event.target;
-	const quote = target.quote.value;
-	const font = target.font.value;
-	const color = target.color.value;
-
-	console.log("add_text_function : quote: " + quote + " font : " + font + " color : " + color);
-	console.log("add_text_function : filename: " + gFilename);
-	
-	//call server's upload method and pass file name, and file-reader info
-	Meteor.call('add-text-to-image', gFilename, 50, 50, quote, font, color, function(error, result) {
-        console.log("client: result: " + result);
-	});	
-}
