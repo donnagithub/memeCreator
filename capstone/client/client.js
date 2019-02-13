@@ -1,7 +1,4 @@
 
-let gFilename = "";
-let gFile = "";
-
 let gQuote = "default quote";
 let gFont = "arial";
 let gFontsize = "20";
@@ -23,10 +20,12 @@ Template.upload.events({
 		var imageObj = new Image();
 		imageObj.onload = function(){
 		
-			var hRatio = canvas.width / imageObj.width    ;
-			var vRatio = canvas.height / imageObj.height  ;
+			// determine aspect ratio for resizing image to fit on canvas
+			var hRatio = canvas.width / imageObj.width;
+			var vRatio = canvas.height / imageObj.height;
 			var ratio  = Math.min ( hRatio, vRatio );
-			context.drawImage(imageObj, 0, 0, imageObj.width, imageObj.height, 0, 0, imageObj.width*ratio, imageObj.height*ratio);
+			context.drawImage(imageObj, 0, 0, imageObj.width, imageObj.height, 0, 0, 
+				imageObj.width*ratio, imageObj.height*ratio);
 			context.font = gFontsize + "px " + gFont;
 			context.fillStyle = gColor;
 			context.fillText(gQuote, 10, gFontsize);
@@ -60,7 +59,8 @@ Template.body.events({
 		gFontsize = target.fontsize.value;
 		gColor = target.color.value;
 
-		console.log("save_text_settings_function : quote: " + gQuote + " font : " + gFont + " fontsize : " + gFontsize + " color : " + gColor);
+		console.log("save_text_settings_function : quote: " + gQuote + " font : " + 
+			gFont + " fontsize : " + gFontsize + " color : " + gColor);
 
 	},
 	

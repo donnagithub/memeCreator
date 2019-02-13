@@ -6,19 +6,19 @@
 	<div style="margin-left: 20px;">
 	
 		<h1>Welcome to MemeCreator!</h1>
-		
+		<br>
 		{{> addtext}}
-		
+		<br>
 		{{> upload}}
-		
+		<br>
   		{{> canvas}}
-  		
   	</div>
 </body>
 
 <template name="addtext">
 	<form class="add-text">
-		<b>(1) Type your quote: </b><input type="text" name="quote" placeholder="Type quote here" size=100 />
+		<b>(1) Type your quote: </b><input type="text" name="quote" 
+			placeholder="Type quote here" size=100 />
 		<b>Choose your font: </b>
 			<select name="font">
 				<option value="Arial">Arial</option>
@@ -53,6 +53,7 @@
 <template name="canvas">
 	<canvas id="canvas-img"></canvas>
 	<div id="save-image-instruction" style="display:none;">
+		<br>
 		<b>(3) Right click your new meme and select "Save image as..."</b>
 	</div>
 </template>
@@ -66,7 +67,8 @@
   <button class='blue' style="background-color: blue; color: white;">Blue</button>
   <button class='green' style="background-color: green; color: white;">Green</button>
   <button class='black' style="background-color: black; color: white;">Black</button>
-  <button class='white' style="background-color: white; background: linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);">White</button>
+  <button class='white' style="background-color: white; 
+  	background: linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);">White</button>
   <button class='thicker'>Thicker</button>
   <button class='thinner'>Thinner</button>
   <hr>
